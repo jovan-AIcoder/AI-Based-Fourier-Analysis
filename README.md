@@ -16,18 +16,16 @@ The result is an interpretable decomposition of sound into:
 
 ## 🧠 Core Idea
 
-Given an audio signal ($ y(t) $), the model approximates it as:
+Given an audio signal ($y(t)$), the model approximates it as:
 $$
-
 y(t) \approx \sum_{i=1}^{N} A_i \sin(\omega_i t + \phi_i)
-
 $$
 
 Where:
 
-* ($ \omega_i $) → learned frequencies (from weights)
-* ($ \phi_i $) → learned phase shifts (from biases)
-* ($ A_i $) → learned amplitudes (from output layer)
+* ($\omega_i$) → learned frequencies (from weights)
+* ($\phi_i$) → learned phase shifts (from biases)
+* ($A_i$) → learned amplitudes (from output layer)
 
 This transforms the neural network into a **data-driven Fourier-like decomposition system**.
 
@@ -58,7 +56,7 @@ This transforms the neural network into a **data-driven Fourier-like decompositi
 
 A simple neural network is constructed:
 
-* **Input:** time ($ t $)
+* **Input:** time ($t$)
 * **Hidden layer:** sinusoidal activation
 * **Output layer:** linear combination
 
@@ -74,8 +72,8 @@ This effectively creates a sum of sinusoidal basis functions.
 
 After training:
 
-* Weights → frequencies ($ \omega $)
-* Biases → phase shifts ($ \phi $)
+* Weights → frequencies ($\omega$)
+* Biases → phase shifts ($\phi$)
 
 These are exported into an Excel file.
 
