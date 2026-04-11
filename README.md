@@ -17,9 +17,8 @@ The result is an interpretable decomposition of sound into:
 ## 🧠 Core Idea
 
 Given an audio signal ($y(t)$), the model approximates it as:
-$$
-y(t) \approx \sum_{i=1}^{N} A_i \sin(\omega_i t + \phi_i)
-$$
+
+$$y(t) \approx \sum_{i=1}^{N} A_i \sin(\omega_i t + \phi_i)$$
 
 Where:
 
@@ -117,9 +116,7 @@ python analyzer.py
 
 * Frequencies are in **angular form (rad/s)**
   Convert to Hz using:
-  $
-  f = \frac{\omega}{2\pi}
-  $
+  $f = \frac{\omega}{2\pi}$
 
 * The model may produce:
 
