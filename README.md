@@ -16,7 +16,7 @@ The result is an interpretable decomposition of sound into:
 
 ## 🧠 Core Idea
 
-Given an audio signal ($y(t)$), the model approximates it as:
+Given an audio signal (y(t)), the model approximates it using:
 
 $$y(t) \approx \sum_{i=1}^{N} A_i \sin(\omega_i t + \phi_i)$$
 
