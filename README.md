@@ -162,4 +162,6 @@ By treating neural networks not just as predictors, but as **tools for discoveri
 This project is a small step toward that idea.
 
 ## License
-This project is under MIT license
+This project is under MIT license.
+
+Created by Jovan, 2026
