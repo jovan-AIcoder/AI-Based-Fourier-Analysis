@@ -82,11 +82,11 @@ These are exported into an Excel file.
 
 The resulting `frequencies.xlsx` contains:
 
-| Index    | Frequencies (ω) | Phase Shift (φ) |
-| -------- | --------------- | --------------- |
-| Neuron_0 | ...             | ...             |
-| Neuron_1 | ...             | ...             |
-| ...      | ...             | ...             |
+| Index    | Frequencies (ω) | Phase Shift (φ) | Amplitudes (A) |
+| -------- | --------------- | --------------- | -------------- |
+| Neuron_0 | ...             | ...             | ...            |
+| Neuron_1 | ...             | ...             | ...            |
+| ...      | ...             | ...             | ...            |
 
 Each row corresponds to one sinusoidal component learned by the model.
 
