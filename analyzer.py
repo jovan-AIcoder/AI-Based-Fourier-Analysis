@@ -8,7 +8,7 @@ from tensorflow import math
 import os
 def sin(x):
     return math.sin(x)
-def analyzer(audio_path,max_freq=2048):
+def analyzer(audio_path,max_freq=128):
     # audio sampling
     print('Sampling the audio signal...')
     a, b = librosa.load(audio_path, mono=True)
