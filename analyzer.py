@@ -17,6 +17,13 @@ def analyzer(audio_path,max_freq=100):
     df = pd.DataFrame({'time': time,'amplitude': a})
     t = df['time']
     y = df['amplitude']
+    # plot the audio signal
+    plt.plot(t, y)
+    plt.xlabel('Time (s)')
+    plt.ylabel('Amplitude')
+    plt.title('Audio Signal')
+    plt.savefig('audio_signal.png')
+    #plt.show()
     # analyze the audio signal
     model = keras.Sequential([
         keras.layers.Dense(max_freq, activation=sin, input_shape=(1,)),

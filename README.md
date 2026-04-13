@@ -37,6 +37,7 @@ This transforms the neural network into a **data-driven Fourier-like decompositi
 ├── bird.mp3           # Input audio file (example: bird sound)
 ├── analyzer.py        # Main script for signal analysis
 ├── frequencies.xlsx   # Output file containing extracted parameters
+├── audio_signal.png   # Audio signal visualization
 ```
 
 ---
