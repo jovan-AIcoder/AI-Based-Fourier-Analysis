@@ -1,7 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import librosa
-import pandas as pd
 import numpy as np
 from tensorflow import keras
 from tensorflow import math
