@@ -34,7 +34,7 @@ def analyzer(audio_path,max_freq=128):
     plt.title('Audio Signal')
     plt.legend(['Original Signal', 'Learned Signal'])
     plt.savefig('audio_signal.png')
-    plt.show()
+    #plt.show()
     weights, biases = model.layers[0].get_weights()
     amplitudes = model.layers[1].get_weights()[0]
     weights_flat = weights[0]
