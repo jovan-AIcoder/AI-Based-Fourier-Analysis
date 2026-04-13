@@ -8,7 +8,7 @@ from tensorflow import math
 import os
 def sin(x):
     return math.sin(x)
-def analyzer(audio_path,max_freq=100):
+def analyzer(audio_path,max_freq=2048):
     # audio sampling
     print('Sampling the audio signal...')
     a, b = librosa.load(audio_path, mono=True)
@@ -17,13 +17,6 @@ def analyzer(audio_path,max_freq=100):
     df = pd.DataFrame({'time': time,'amplitude': a})
     t = df['time']
     y = df['amplitude']
-    # plot the audio signal
-    plt.plot(t, y)
-    plt.xlabel('Time (s)')
-    plt.ylabel('Amplitude')
-    plt.title('Audio Signal')
-    plt.savefig('audio_signal.png')
-    #plt.show()
     # analyze the audio signal
     model = keras.Sequential([
         keras.layers.Dense(max_freq, activation=sin, input_shape=(1,)),
@@ -32,6 +25,16 @@ def analyzer(audio_path,max_freq=100):
     model.compile(optimizer='adam', loss='mean_squared_error')
     print('Analyzing the audio signal...')
     model.fit(t, y, epochs=30)
+    y_pred = model.predict(t)
+    # plot the audio signal
+    plt.plot(t, y)
+    plt.plot(t, y_pred, '--')
+    plt.xlabel('Time (s)')
+    plt.ylabel('Amplitude')
+    plt.title('Audio Signal')
+    plt.legend(['Original Signal', 'Learned Signal'])
+    plt.savefig('audio_signal.png')
+    plt.show()
     weights, biases = model.layers[0].get_weights()
     amplitudes = model.layers[1].get_weights()[0]
     weights_flat = weights[0]
