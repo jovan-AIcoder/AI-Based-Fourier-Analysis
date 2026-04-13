@@ -15,7 +15,7 @@ def analyzer(audio_path,max_freq=128):
     duration = librosa.get_duration(y=a, sr=b)
     time = np.linspace(0, duration, len(a))
     df = pd.DataFrame({'time': time,'amplitude': a})
-    t = df['time']
+    t = df['time'] * 1000000 # convert to microseconds
     y = df['amplitude']
     # analyze the audio signal
     model = keras.Sequential([
@@ -24,12 +24,12 @@ def analyzer(audio_path,max_freq=128):
     ])
     model.compile(optimizer='adam', loss='mean_squared_error')
     print('Analyzing the audio signal...')
-    model.fit(t, y, epochs=30)
+    model.fit(t, y, epochs=50)
     y_pred = model.predict(t)
     # plot the audio signal
     plt.plot(t, y)
     plt.plot(t, y_pred, '--')
-    plt.xlabel('Time (s)')
+    plt.xlabel('Time (microseconds)')
     plt.ylabel('Amplitude')
     plt.title('Audio Signal')
     plt.legend(['Original Signal', 'Learned Signal'])
@@ -37,7 +37,7 @@ def analyzer(audio_path,max_freq=128):
     #plt.show()
     weights, biases = model.layers[0].get_weights()
     amplitudes = model.layers[1].get_weights()[0]
-    weights_flat = weights[0]
+    weights_flat = weights[0]/1000000
     df_freq = pd.DataFrame({'Frequencies': weights_flat,'Phase shift': biases,'Amplitudes': amplitudes.flatten()})
     df_freq.index = [f'Neuron_{i}' for i in range(len(biases))]
     return df_freq
