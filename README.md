@@ -49,7 +49,7 @@ This transforms the neural network into a **data-driven Fourier-like decompositi
 * The `.mp3` file is loaded using `librosa`
 * The signal is converted into:
 
-  * Time array (seconds)
+  * Time array (microseconds)
   * Sound signal values
 
 ### 2. Neural Approximation
