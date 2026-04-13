@@ -85,8 +85,8 @@ The resulting `frequencies.xlsx` contains:
 
 | Index    | Frequencies (ω) | Phase Shift (φ) | Amplitudes (A) |
 | -------- | --------------- | --------------- | -------------- |
-| Neuron_0 | ...             | ...             | ...            |
-| Neuron_1 | ...             | ...             | ...            |
+| Frequency_0 | ...             | ...             | ...            |
+| Frequency_1 | ...             | ...             | ...            |
 | ...      | ...             | ...             | ...            |
 
 Each row corresponds to one sinusoidal component learned by the model.
