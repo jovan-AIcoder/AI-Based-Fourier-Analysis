@@ -8,7 +8,7 @@ from tensorflow import math
 import os
 def sin(x):
     return math.sin(x)
-def analyzer(audio_path,max_freq=128):
+def analyzer(audio_path,max_freq=256):
     # audio sampling
     print('Sampling the audio signal...')
     a, b = librosa.load(audio_path, mono=True)
@@ -24,7 +24,7 @@ def analyzer(audio_path,max_freq=128):
     ])
     model.compile(optimizer='adam', loss='mean_squared_error')
     print('Analyzing the audio signal...')
-    model.fit(t, y, epochs=50)
+    model.fit(t, y, epochs=128)
     y_pred = model.predict(t)
     # plot the audio signal
     plt.plot(t, y)
@@ -37,9 +37,9 @@ def analyzer(audio_path,max_freq=128):
     #plt.show()
     weights, biases = model.layers[0].get_weights()
     amplitudes = model.layers[1].get_weights()[0]
-    weights_flat = weights[0]/1000000
+    weights_flat = weights[0]
     df_freq = pd.DataFrame({'Frequencies': weights_flat,'Phase shift': biases,'Amplitudes': amplitudes.flatten()})
-    df_freq.index = [f'Neuron_{i}' for i in range(len(biases))]
+    df_freq.index = [f'Frequency_{i}' for i in range(len(biases))]
     return df_freq
 
 
