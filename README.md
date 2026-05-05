@@ -1,168 +1,143 @@
-# 🐦 Neural Spectral Analyzer (Fourier-inspired Audio Decomposition)
+# AI-Based Fourier Analysis (aifourier)
 
-## 📌 Overview
+> *“Machines can learn Fourier analysis.”*
 
-This project explores a novel approach to analyzing audio signals using a minimalist neural network architecture inspired by the Fourier series.
+A Python library that approximates Fourier decomposition using a sinusoidal neural network.
 
-Instead of applying classical Fast Fourier Transform (FFT), this method leverages a neural network with sinusoidal activation to **learn the underlying frequency components of an audio signal directly from data**.
-
-The result is an interpretable decomposition of sound into:
-
-* Frequencies (angular)
-* Phase shifts
-* (implicitly) amplitudes
+Instead of explicitly computing Fourier integrals, this library **learns** the frequency components of a signal through optimization.
 
 ---
 
-## 🧠 Core Idea
+## ✨ Features
 
-Given an audio signal (y(t)), the model approximates it using:
+* 🔊 Analyze audio signals (`.wav`, `.mp3`, `.flac`, `.ogg`)
+* 🧠 Neural network with sinusoidal activation
+* 📊 Extract:
 
-$$y(t) \approx \sum_{i=1}^{N} A_i \sin(\omega_i t + \phi_i)$$
-
-Where:
-
-* ($\omega_i$) → learned frequencies (from weights)
-* ($\phi_i$) → learned phase shifts (from biases)
-* ($A_i$) → learned amplitudes (from output layer)
-
-This transforms the neural network into a **data-driven Fourier-like decomposition system**.
+  * Angular frequency
+  * Phase shift
+  * Amplitude
+* ⚡ Simple one-line API
+* 📁 Output as Pandas DataFrame
 
 ---
 
-## 📁 Project Structure
+## 📦 Installation
 
+```bash
+pip install aifourier
 ```
-.
-├── bird.mp3           # Input audio file (example: bird sound)
-├── analyzer.py        # Main script for signal analysis
-├── frequencies.xlsx   # Output file containing extracted parameters
-├── audio_signal.png   # Audio signal visualization
-```
-
----
-
-## ⚙️ How It Works
-
-### 1. Audio Sampling
-
-* The `.mp3` file is loaded using `librosa`
-* The signal is converted into:
-
-  * Time array (microseconds)
-  * Sound signal values
-
-### 2. Neural Approximation
-
-A simple neural network is constructed:
-
-* **Input:** time ($t$)
-* **Hidden layer:** sinusoidal activation
-* **Output layer:** linear combination
-
-This effectively creates a sum of sinusoidal basis functions.
-
-### 3. Training
-
-* Loss: Mean Squared Error (MSE)
-* Optimizer: Adam
-* Goal: Fit the waveform as closely as possible
-
-### 4. Parameter Extraction
-
-After training:
-
-* Weights → frequencies ($\omega$)
-* Biases → phase shifts ($\phi$)
-
-These are exported into an Excel file.
-
----
-
-## 📊 Output
-
-The resulting `frequencies.xlsx` contains:
-
-| Index    | Frequencies (ω) | Phase Shift (φ) | Amplitudes (A) |
-| -------- | --------------- | --------------- | -------------- |
-| Frequency_0 | ...             | ...             | ...            |
-| Frequency_1 | ...             | ...             | ...            |
-| ...      | ...             | ...             | ...            |
-
-Each row corresponds to one sinusoidal component learned by the model.
 
 ---
 
 ## 🚀 Usage
 
-1. Install dependencies:
+```python
+import aifourier as aif
 
-```bash
-pip install numpy pandas matplotlib librosa tensorflow openpyxl
+df = aif.analyze("audio.mp3", max_modes=128, epochs=300)
+
+print(df.head())
 ```
 
-2. Run the analyzer:
+---
 
-```bash
-python analyzer.py
+## 📊 Output
+
+The result is a DataFrame containing:
+
+| Column      | Description                        |
+| ----------- | ---------------------------------- |
+| Frequencies | Learned angular frequencies (ω)    |
+| Phase shift | Phase of each component            |
+| Amplitudes  | Contribution strength of each mode |
+
+---
+
+## 🧠 How It Works
+
+The signal is approximated as:
+
+y(t) ≈ Σ Aᵢ sin(ωᵢ t + φᵢ)
+
+Where:
+
+* Aᵢ = amplitude
+* ωᵢ = frequency
+* φᵢ = phase
+
+These parameters are learned by a neural network instead of computed analytically.
+
+---
+
+## ⚙️ Parameters
+
+```python
+aif.analyze(audio_path, max_modes=128, epochs=64)
 ```
 
-3. Output:
-
-* `frequencies.xlsx` will be generated and opened automatically
-
----
-
-## ⚠️ Notes
-
-* Frequencies are in **angular form (rad/s)**
-  Convert to Hz using:
-  $f = \frac{\omega}{2\pi}$
-
-* The model may produce:
-
-  * Redundant frequencies
-  * Low-amplitude components
-  * Non-orthogonal basis functions
-
-* This is **not a replacement for FFT**, but an alternative perspective:
-
-  * Data-driven
-  * Interpretable
-  * Flexible
+* `audio_path` : Path to audio file
+* `max_modes`  : Number of sinusoidal components
+* `epochs`     : Training iterations (higher = better approximation)
 
 ---
 
-## 💡 Future Improvements
+## 📁 Example
 
-* Extract amplitudes from the output layer
-* Apply regularization for sparse frequency selection
-* Compare results with FFT
-* Use windowing for better temporal resolution
-* Extend to real-time audio analysis
+See the `examples/` folder for a complete demo:
 
----
+```bash
+cd examples
+python example.py
+```
 
-## 🎯 Motivation
+This will:
 
-This project aims to bridge:
-
-* Signal Processing
-* Machine Learning
-* Mathematical Physics
-
-By treating neural networks not just as predictors, but as **tools for discovering structure in physical signals**.
+* Analyze `bird.mp3`
+* Generate frequency components
+* Save results
+* Plot the spectrum
 
 ---
 
-## ✨ Closing Thought
+## ⚖️ Comparison with FFT
 
-> “What if a neural network could listen to sound not as data,
-> but as a composition of pure mathematical waves?”
+| Method    | Approach                    |
+| --------- | --------------------------- |
+| FFT       | Analytical, deterministic   |
+| aifourier | Learning-based, approximate |
 
-This project is a small step toward that idea.
+This project explores whether neural networks can **discover Fourier structure from data**.
 
-## License
-This project is under MIT license.
+---
 
-Created by Jovan, 2026
+## 🚧 Limitations
+
+* Approximation quality depends on training
+* Slower than FFT
+* Results may vary between runs
+
+---
+
+## 💡 Future Ideas
+
+* Signal reconstruction from learned parameters
+* FFT comparison mode
+* Real-time signal analysis (oscilloscope / radio)
+* Complex-valued extensions
+
+---
+
+## 👤 Author
+
+Jovan
+
+---
+
+## 📜 License
+
+MIT License
+
+---
+
+> *“What Fourier derives analytically, neural networks can approximate through learning.”*
