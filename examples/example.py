@@ -2,7 +2,7 @@ import aifourier as aif
 import matplotlib.pyplot as plt
 
 # analyze audio
-df = aif.analyze("examples/bird.mp3", max_modes=64, epochs=128)
+df = aif.analyze("examples/bird.mp3", max_modes=128, epochs=64)
 
 print(df.head())
 
