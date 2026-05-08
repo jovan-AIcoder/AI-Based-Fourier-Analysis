@@ -27,7 +27,7 @@ def analyze(audio_path,max_modes=128,epochs=64,use_phase_shift=True):
     duration = librosa.get_duration(y=a, sr=b)
     time = np.linspace(0, duration, len(a))
     df = pd.DataFrame({'time': time,'amplitude': a})
-    t = df['time'] * 1000000 # convert to microseconds
+    t = df['time'] * 1e6 # convert to microseconds
     y = df['amplitude']
     print('Audio signal sampled successfully.')
     # analyze the audio signal
@@ -41,14 +41,14 @@ def analyze(audio_path,max_modes=128,epochs=64,use_phase_shift=True):
     if use_phase_shift:
         weights, biases = model.layers[0].get_weights()
         amplitudes = model.layers[1].get_weights()[0]
-        weights_flat = weights[0]
+        weights_flat = ((weights[0])*1e6)/(2*np.pi) # convert to Hz
         df_freq = pd.DataFrame({'Frequencies': weights_flat,'Phase shift': biases,'Amplitudes': amplitudes.flatten()})
         df_freq.index = [f'Frequency_{i}' for i in range(len(biases))]
     else:
         weights = model.layers[0].get_weights()[0]
         amplitudes = model.layers[1].get_weights()[0]
 
-        weights_flat = weights.flatten()
+        weights_flat = ((weights.flatten())*1e6)/(2*np.pi) # convert to Hz
 
         df_freq = pd.DataFrame({
             'Frequencies': weights_flat,

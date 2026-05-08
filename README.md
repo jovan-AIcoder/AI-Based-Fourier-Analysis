@@ -48,7 +48,7 @@ The result is a DataFrame containing:
 
 | Column      | Description                        |
 | ----------- | ---------------------------------- |
-| Frequencies | Learned angular frequencies (ω)    |
+| Frequencies | Learned frequencies (Hz)    |
 | Phase shift | Phase of each component            |
 | Amplitudes  | Contribution strength of each mode |
 
@@ -63,7 +63,7 @@ y(t) ≈ Σ Aᵢ sin(ωᵢ t + φᵢ)
 Where:
 
 * Aᵢ = amplitude
-* ωᵢ = frequency
+* ωᵢ = angular frequency
 * φᵢ = phase
 
 These parameters are learned by a neural network instead of computed analytically.
