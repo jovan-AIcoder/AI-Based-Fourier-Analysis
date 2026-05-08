@@ -73,12 +73,13 @@ These parameters are learned by a neural network instead of computed analyticall
 ## ⚙️ Parameters
 
 ```python
-aif.analyze(audio_path, max_modes=128, epochs=64)
+aif.analyze(audio_path, max_modes=128, epochs=64,use_phase_shift=True)
 ```
 
 * `audio_path` : Path to audio file
 * `max_modes`  : Number of sinusoidal components
 * `epochs`     : Training iterations (higher = better approximation)
+* `use_phase_shift` : If this is set to `False`, all phase shifts are set to zero.
 
 ---
 
