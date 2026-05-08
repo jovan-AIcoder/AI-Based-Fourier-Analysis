@@ -45,10 +45,19 @@ def analyze(audio_path,max_modes=128,epochs=64,use_phase_shift=True):
         df_freq = pd.DataFrame({'Frequencies': weights_flat,'Phase shift': biases,'Amplitudes': amplitudes.flatten()})
         df_freq.index = [f'Frequency_{i}' for i in range(len(biases))]
     else:
-        weights = model.layers[0].get_weights()
+        weights = model.layers[0].get_weights()[0]
         amplitudes = model.layers[1].get_weights()[0]
-        weights_flat = weights[0]
-        df_freq = pd.DataFrame({'Frequencies': weights_flat,'Amplitudes': amplitudes.flatten()})
-        df_freq.index = [f'Frequency_{i}' for i in range(len(weights))]
+
+        weights_flat = weights.flatten()
+
+        df_freq = pd.DataFrame({
+            'Frequencies': weights_flat,
+            'Amplitudes': amplitudes.flatten()
+        })
+
+        df_freq.index = [
+            f'Frequency_{i}'
+            for i in range(len(weights_flat))
+        ]
     print('Audio signal analyzed successfully.')
     return df_freq
