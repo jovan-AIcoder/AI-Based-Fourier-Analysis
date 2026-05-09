@@ -1,5 +1,7 @@
 # AI-Based Fourier Analysis (aifourier)
 
+![aifourier_logo](aifourier_logo.png)
+
 > *“Machines can learn Fourier analysis.”*
 
 A Python library that approximates Fourier decomposition using a sinusoidal neural network.
