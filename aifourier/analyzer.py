@@ -4,7 +4,7 @@ import librosa
 import numpy as np
 from tensorflow import keras
 from tensorflow import math
-def analyze(audio_path,max_modes=128,epochs=64,use_phase_shift=True):
+def analyze(audio_path,max_modes=128,epochs=64,use_phase_shift=True,learning_rate=0.0001):
     # error handling
     if not isinstance(audio_path, str):
         raise ValueError('Audio path must be a string.')
@@ -14,6 +14,8 @@ def analyze(audio_path,max_modes=128,epochs=64,use_phase_shift=True):
         raise ValueError('Epochs must be a positive integer.')
     if not isinstance(use_phase_shift,bool):
         raise ValueError('use_phase_shift must be a boolean')
+    if not (isinstance(learning_rate,float)) or learning_rate <= 0:
+        raise ValueError('learning_rate must be a positive float')
     try:
         if not os.path.isfile(audio_path):
             raise ValueError("Audio file not found.")
@@ -35,7 +37,8 @@ def analyze(audio_path,max_modes=128,epochs=64,use_phase_shift=True):
         keras.layers.Dense(max_modes, activation=math.sin, input_shape=(1,),use_bias=use_phase_shift),
         keras.layers.Dense(1,use_bias=False)
     ])
-    model.compile(optimizer='adam', loss='mse')
+    opt = keras.optimizers.Adam(learning_rate=learning_rate)
+    model.compile(optimizer=opt, loss='mse')
     print('Analyzing the audio signal...')
     model.fit(t.values.reshape(-1, 1), y.values, epochs=epochs)
     if use_phase_shift:
