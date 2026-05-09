@@ -35,7 +35,7 @@ def analyze(audio_path,max_modes=128,epochs=64,use_phase_shift=True):
         keras.layers.Dense(max_modes, activation=math.sin, input_shape=(1,),use_bias=use_phase_shift),
         keras.layers.Dense(1,use_bias=False)
     ])
-    model.compile(optimizer='adam', loss='mae')
+    model.compile(optimizer='sgd', loss='mse')
     print('Analyzing the audio signal...')
     model.fit(t.values.reshape(-1, 1), y.values, epochs=epochs)
     if use_phase_shift:
