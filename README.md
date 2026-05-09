@@ -1,6 +1,6 @@
 # AI-Based Fourier Analysis (aifourier)
 
-![aifourier_logo](aifourier_logo.png)
+
 
 > *“Machines can learn Fourier analysis.”*
 
