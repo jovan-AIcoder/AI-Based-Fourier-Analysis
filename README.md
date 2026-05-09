@@ -35,7 +35,7 @@ pip install aifourier
 ```python
 import aifourier as aif
 
-df = aif.analyze("audio.mp3", max_modes=128, epochs=300)
+df = aif.analyze("audio.mp3", max_modes=10000, epochs=256, learning_rate=0.00001)
 
 print(df.head())
 ```
@@ -73,7 +73,7 @@ These parameters are learned by a neural network instead of computed analyticall
 ## ⚙️ Parameters
 
 ```python
-aif.analyze(audio_path, max_modes=128, epochs=64,use_phase_shift=True,learning_rate=0.0001)
+aif.analyze(audio_path, max_modes=10000, epochs=256,use_phase_shift=True,learning_rate=0.00001)
 ```
 
 * `audio_path` : Path to audio file

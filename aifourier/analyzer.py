@@ -4,7 +4,7 @@ import librosa
 import numpy as np
 from tensorflow import keras
 from tensorflow import math
-def analyze(audio_path,max_modes=128,epochs=64,use_phase_shift=True,learning_rate=0.0001):
+def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_rate=0.00001):
     # error handling
     if not isinstance(audio_path, str):
         raise ValueError('Audio path must be a string.')
