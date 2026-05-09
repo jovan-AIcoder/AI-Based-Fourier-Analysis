@@ -16,7 +16,7 @@ Instead of explicitly computing Fourier integrals, this library **learns** the f
 * 🧠 Neural network with sinusoidal activation
 * 📊 Extract:
 
-  * Angular frequency
+  * Frequencies in Hz
   * Phase shift
   * Amplitude
 * ⚡ Simple one-line API
@@ -37,7 +37,7 @@ pip install aifourier
 ```python
 import aifourier as aif
 
-df = aif.analyze("audio.mp3", max_modes=10000, epochs=256, learning_rate=0.00001)
+df = aif.analyze("audio.mp3")
 
 print(df.head())
 ```
@@ -75,7 +75,7 @@ These parameters are learned by a neural network instead of computed analyticall
 ## ⚙️ Parameters
 
 ```python
-aif.analyze(audio_path, max_modes=10000, epochs=256,use_phase_shift=True,learning_rate=0.00001)
+aif.analyze(audio_path, max_modes=10000, epochs=256,use_phase_shift=True,learning_rate=0.00001,save_model=None)
 ```
 
 * `audio_path` : Path to audio file
@@ -83,6 +83,7 @@ aif.analyze(audio_path, max_modes=10000, epochs=256,use_phase_shift=True,learnin
 * `epochs`     : Training iterations (higher = better approximation)
 * `use_phase_shift` : If this is set to `False`, all phase shifts are set to zero.
 * `learning_rate` : Learning rate of NN
+* `save_model` : Path to save learned model
 
 ---
 
@@ -138,7 +139,7 @@ This project explores whether neural networks can **discover Fourier structure f
 
 ## 👤 Author
 
-Jovan
+Jovan, 2026
 
 ---
 

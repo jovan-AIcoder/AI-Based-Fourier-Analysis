@@ -4,7 +4,7 @@ import librosa
 import numpy as np
 from tensorflow import keras
 from tensorflow import math
-def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_rate=0.00001):
+def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_rate=0.00001,save_model=None):
     # error handling
     if not isinstance(audio_path, str):
         raise ValueError('Audio path must be a string.')
@@ -13,9 +13,11 @@ def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_
     if not isinstance(epochs, int) or epochs <= 0:
         raise ValueError('Epochs must be a positive integer.')
     if not isinstance(use_phase_shift,bool):
-        raise ValueError('use_phase_shift must be a boolean')
+        raise ValueError('use_phase_shift must be a boolean.')
     if not (isinstance(learning_rate,float)) or learning_rate <= 0:
-        raise ValueError('learning_rate must be a positive float')
+        raise ValueError('learning_rate must be a positive float.')
+    if(save_model != None) and (type(save_model) != str):
+        raise ValueError('save_model must be a string or None.')
     try:
         if not os.path.isfile(audio_path):
             raise ValueError("Audio file not found.")
@@ -63,4 +65,7 @@ def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_
             for i in range(len(weights_flat))
         ]
     print('Audio signal analyzed successfully.')
+    if(save_model != None):
+        model.save(save_model)
+        print(f'Model is saved successfully to path: {save_model}.')
     return df_freq

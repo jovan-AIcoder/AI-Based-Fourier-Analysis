@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="aifourier",
-    version="0.4.5",
+    version="1.0.0",
     description="AI-based Fourier Analysis using sinusoidal neural networks",
     author="Jovan",
     packages=find_packages(),
