@@ -100,6 +100,10 @@ This will:
 * Save results
 * Plot the spectrum
 
+The frequency spectrum of `bird.mp3` is shown below:
+
+![Spectrum of bird.mp3](examples/spectrum.png)
+
 ---
 
 ## ⚖️ Comparison with FFT
