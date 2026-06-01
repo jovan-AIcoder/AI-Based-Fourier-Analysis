@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aifourier"
-version = "1.0.1"
+version = "1.0.2"
 description = "AI-based Fourier Analysis using sinusoidal neural networks"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -22,6 +22,5 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/jovan-AIcoder/aifourier"
-Repository = "https://github.com/jovan-AIcoder/aifourier"
-Issues = "https://github.com/jovan-AIcoder/aifourier/issues"
+Repository = "https://github.com/jovan-AIcoder/AI-Based-Fourier-Analysis"
+Issues = "https://github.com/jovan-AIcoder/AI-Based-Fourier-Analysis/issues"
