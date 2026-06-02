@@ -81,11 +81,11 @@ aif.analyze(audio_path, max_modes=10000, epochs=256,use_phase_shift=True,learnin
 * `audio_path` : Path to audio file
 * `max_modes`  : Number of sinusoidal components
 * `epochs`     : Training iterations (higher = better approximation)
-* `use_phase_shift` : If this is set to `False`, all phase shifts are set to zero.
+* `use_phase_shift` : If this set to `False`, all phase shifts are set to zero.
 * `learning_rate` : Learning rate of NN
 * `save_model` : Path to save learned model
 * `verbose` : Modes to show training behavior, which can be set to 0,1,2.
-* `positive_freqs_only` : If this is set to `True`, this will keep the positive frequencies and delete the negative ones.
+* `positive_freqs_only` : If this set to `True`, this will keep the positive frequencies and delete the negative ones.
 
 ---
 
