@@ -107,7 +107,7 @@ This will:
 
 The frequency spectrum of `bird.mp3` is shown below:
 
-![Spectrum of bird.mp3](examples/spectrum.png)
+![Spectrum of bird.mp3](https://raw.githubusercontent.com/jovan-AIcoder/AI-Based-Fourier-Analysis/main/examples/spectrum.png)
 
 ---
 
