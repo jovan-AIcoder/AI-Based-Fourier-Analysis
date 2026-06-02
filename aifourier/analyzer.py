@@ -4,7 +4,7 @@ import librosa
 import numpy as np
 from tensorflow import keras
 from tensorflow import math
-def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_rate=0.00001,save_model=None):
+def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_rate=0.00001,save_model=None,verbose=2,positive_freqs_only=True):
     # error handling
     if not isinstance(audio_path, str):
         raise ValueError('Audio path must be a string.')
@@ -18,6 +18,10 @@ def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_
         raise ValueError('learning_rate must be a positive float.')
     if(save_model != None) and (type(save_model) != str):
         raise ValueError('save_model must be a string or None.')
+    if (not isinstance(verbose,int)) or (verbose not in [0,1,2]):
+        raise ValueError('Available values for verbose is 0,1,2.')
+    if not isinstance(positive_freqs_only,bool):
+        raise ValueError('positive_freqs_only must be a boolean.')
     try:
         if not os.path.isfile(audio_path):
             raise ValueError("Audio file not found.")
@@ -26,14 +30,16 @@ def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_
     if not audio_path.endswith(('.wav', '.mp3', '.flac', '.ogg')):
         raise ValueError('Unsupported audio format. Supported formats are: .wav, .mp3, .flac, .ogg')
     # audio sampling
-    print('Sampling the audio signal...')
+    if(verbose > 0):
+        print('Sampling the audio signal...')
     a, b = librosa.load(audio_path, mono=True)
     duration = librosa.get_duration(y=a, sr=b)
     time = np.linspace(0, duration, len(a))
     df = pd.DataFrame({'time': time,'amplitude': a})
     t = df['time'] * 1e6 # convert to microseconds
     y = df['amplitude']
-    print('Audio signal sampled successfully.')
+    if(verbose > 0):
+        print('Audio signal sampled successfully.')
     # analyze the audio signal
     model = keras.Sequential([
         keras.layers.Dense(max_modes, activation=math.sin, input_shape=(1,),use_bias=use_phase_shift),
@@ -41,8 +47,9 @@ def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_
     ])
     opt = keras.optimizers.Adam(learning_rate=learning_rate)
     model.compile(optimizer=opt, loss='mse')
-    print('Analyzing the audio signal...')
-    model.fit(t.values.reshape(-1, 1), y.values, epochs=epochs)
+    if(verbose > 0):
+        print('Analyzing the audio signal...')
+    model.fit(t.values.reshape(-1, 1), y.values, epochs=epochs, verbose=verbose)
     if use_phase_shift:
         weights, biases = model.layers[0].get_weights()
         amplitudes = model.layers[1].get_weights()[0]
@@ -64,7 +71,12 @@ def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_
             f'Frequency_{i}'
             for i in range(len(weights_flat))
         ]
-    print('Audio signal analyzed successfully.')
+    if positive_freqs_only:
+        if(verbose > 0):
+            print('Keeping the positive frequencies...')
+        df_freq = (df_freq[df_freq['Frequencies'] >= 0].reset_index(drop=True))  
+    if(verbose > 0):
+        print('Audio signal analyzed successfully.')
     if(save_model != None):
         model.save(save_model)
         print(f'Model is saved successfully to path: {save_model}.')

@@ -1,6 +1,6 @@
 # AI-Based Fourier Analysis (aifourier)
 
-![aifourier_logo](aifourier_logo.png)
+![aifourier_logo](https://raw.githubusercontent.com/jovan-AIcoder/AI-Based-Fourier-Analysis/main/aifourier_logo.png)
 
 > *“Machines can learn Fourier analysis.”*
 
@@ -75,7 +75,7 @@ These parameters are learned by a neural network instead of computed analyticall
 ## ⚙️ Parameters
 
 ```python
-aif.analyze(audio_path, max_modes=10000, epochs=256,use_phase_shift=True,learning_rate=0.00001,save_model=None)
+aif.analyze(audio_path, max_modes=10000, epochs=256,use_phase_shift=True,learning_rate=0.00001,save_model=None,verbose=2,positive_freqs_only=True)
 ```
 
 * `audio_path` : Path to audio file
@@ -84,6 +84,8 @@ aif.analyze(audio_path, max_modes=10000, epochs=256,use_phase_shift=True,learnin
 * `use_phase_shift` : If this is set to `False`, all phase shifts are set to zero.
 * `learning_rate` : Learning rate of NN
 * `save_model` : Path to save learned model
+* `verbose` : Modes to show training behavior, which can be set to 0,1,2.
+* `positive_freqs_only` : If this is set to `True`, this will keep the positive frequencies and delete the negative ones.
 
 ---
 
