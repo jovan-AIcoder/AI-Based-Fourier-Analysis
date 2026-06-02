@@ -4,7 +4,7 @@ import librosa
 import numpy as np
 from tensorflow import keras
 from tensorflow import math
-def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_rate=0.00001,save_model=None,verbose=2,positive_freqs_only=True):
+def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_rate=0.00001,save_model=None,verbose=2,positive_freqs_only=True,abs_amplitudes=True):
     # error handling
     if not isinstance(audio_path, str):
         raise ValueError('Audio path must be a string.')
@@ -14,7 +14,7 @@ def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_
         raise ValueError('Epochs must be a positive integer.')
     if not isinstance(use_phase_shift,bool):
         raise ValueError('use_phase_shift must be a boolean.')
-    if not (isinstance(learning_rate,float)) or learning_rate <= 0:
+    if not (isinstance(learning_rate,(int,float))) or learning_rate <= 0:
         raise ValueError('learning_rate must be a positive float.')
     if(save_model != None) and (type(save_model) != str):
         raise ValueError('save_model must be a string or None.')
@@ -22,6 +22,8 @@ def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_
         raise ValueError('Available values for verbose is 0,1,2.')
     if not isinstance(positive_freqs_only,bool):
         raise ValueError('positive_freqs_only must be a boolean.')
+    if not isinstance(abs_amplitudes,bool):
+        raise ValueError('abs_amplitudes must be a boolean')
     try:
         if not os.path.isfile(audio_path):
             raise ValueError("Audio file not found.")
@@ -38,6 +40,8 @@ def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_
     df = pd.DataFrame({'time': time,'amplitude': a})
     t = df['time'] * 1e6 # convert to microseconds
     y = df['amplitude']
+    if len(a) < 10:
+        raise ValueError('Audio file is too short.')
     if(verbose > 0):
         print('Audio signal sampled successfully.')
     # analyze the audio signal
@@ -47,6 +51,9 @@ def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_
     ])
     opt = keras.optimizers.Adam(learning_rate=learning_rate)
     model.compile(optimizer=opt, loss='mse')
+    if(verbose == 1):
+        print('Model summary: \n')
+        model.summary()
     if(verbose > 0):
         print('Analyzing the audio signal...')
     model.fit(t.values.reshape(-1, 1), y.values, epochs=epochs, verbose=verbose)
@@ -75,6 +82,10 @@ def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_
         if(verbose > 0):
             print('Keeping the positive frequencies...')
         df_freq = (df_freq[df_freq['Frequencies'] >= 0].reset_index(drop=True))  
+    if abs_amplitudes:
+        if(verbose > 0):
+            print('Taking the absolute value of all amplitudes...')
+        df_freq['Amplitudes'] = (df_freq['Amplitudes'].abs())
     if(verbose > 0):
         print('Audio signal analyzed successfully.')
     if(save_model != None):
