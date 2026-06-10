@@ -31,9 +31,11 @@ def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_
         raise ValueError(f'Error accessing audio file: {e}')
     if not audio_path.endswith(('.wav', '.mp3', '.flac', '.ogg')):
         raise ValueError('Unsupported audio format. Supported formats are: .wav, .mp3, .flac, .ogg')
+    
     # audio sampling
     if(verbose > 0):
         print('Sampling the audio signal...')
+
     a, b = librosa.load(audio_path, mono=True)
     duration = librosa.get_duration(y=a, sr=b)
     time = np.linspace(0, duration, len(a))
@@ -44,18 +46,20 @@ def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_
         raise ValueError('Audio file is too short.')
     if(verbose > 0):
         print('Audio signal sampled successfully.')
+
     # analyze the audio signal
     model = keras.Sequential([
         keras.layers.Dense(max_modes, activation=math.sin, input_shape=(1,),use_bias=use_phase_shift),
         keras.layers.Dense(1,use_bias=False)
     ])
     opt = keras.optimizers.Adam(learning_rate=learning_rate)
-    model.compile(optimizer=opt, loss='mse')
+    model.compile(optimizer=opt, loss='mse', metrics=['mae'])
     if(verbose == 1):
         print('Model summary: \n')
         model.summary()
     if(verbose > 0):
         print('Analyzing the audio signal...')
+
     model.fit(t.values.reshape(-1, 1), y.values, epochs=epochs, verbose=verbose)
     if use_phase_shift:
         weights, biases = model.layers[0].get_weights()
@@ -78,17 +82,22 @@ def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_
             f'Frequency_{i}'
             for i in range(len(weights_flat))
         ]
+    
     if positive_freqs_only:
         if(verbose > 0):
             print('Keeping the positive frequencies...')
         df_freq = (df_freq[df_freq['Frequencies'] >= 0].reset_index(drop=True))  
+    
     if abs_amplitudes:
         if(verbose > 0):
             print('Taking the absolute value of all amplitudes...')
         df_freq['Amplitudes'] = (df_freq['Amplitudes'].abs())
+    
     if(verbose > 0):
         print('Audio signal analyzed successfully.')
+    
     if(save_model != None):
         model.save(save_model)
         print(f'Model is saved successfully to path: {save_model}.')
+    
     return df_freq
