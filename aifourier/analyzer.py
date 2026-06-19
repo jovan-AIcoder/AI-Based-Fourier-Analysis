@@ -4,7 +4,9 @@ import librosa
 import numpy as np
 from tensorflow import keras
 from tensorflow import math
-def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_rate=0.00001,save_model=None,verbose=2,positive_freqs_only=True,abs_amplitudes=True):
+def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_rate=0.00001,save_model=None,verbose=2,positive_freqs_only=True,abs_amplitudes=True,optimizer='adam'):
+    # supported optimizers
+    supported_opt = ['sgd','rmsprop','adam','adamw','adagrad','adadelta','adamax','nadam','ftrl']
     # error handling
     if not isinstance(audio_path, str):
         raise ValueError('Audio path must be a string.')
@@ -12,18 +14,22 @@ def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_
         raise ValueError('Max modes must be a positive integer.')
     if not isinstance(epochs, int) or epochs <= 0:
         raise ValueError('Epochs must be a positive integer.')
-    if not isinstance(use_phase_shift,bool):
+    if not isinstance(use_phase_shift, bool):
         raise ValueError('use_phase_shift must be a boolean.')
-    if not (isinstance(learning_rate,(int,float))) or learning_rate <= 0:
+    if not (isinstance(learning_rate, (int,float))) or learning_rate <= 0:
         raise ValueError('learning_rate must be a positive float.')
     if(save_model != None) and (type(save_model) != str):
         raise ValueError('save_model must be a string or None.')
-    if (not isinstance(verbose,int)) or (verbose not in [0,1,2]):
+    if (not isinstance(verbose, int)) or (verbose not in [0,1,2]):
         raise ValueError('Available values for verbose is 0,1,2.')
-    if not isinstance(positive_freqs_only,bool):
+    if not isinstance(positive_freqs_only, bool):
         raise ValueError('positive_freqs_only must be a boolean.')
-    if not isinstance(abs_amplitudes,bool):
+    if not isinstance(abs_amplitudes, bool):
         raise ValueError('abs_amplitudes must be a boolean')
+    if not isinstance(optimizer, str):
+        raise ValueError('optimizer must be a string.')
+    if optimizer.strip().lower() not in supported_opt:
+        raise ValueError(f'Unsupported optimizer. Supported optimizers are: {supported_opt}')
     try:
         if not os.path.isfile(audio_path):
             raise ValueError("Audio file not found.")
@@ -47,16 +53,43 @@ def analyze(audio_path,max_modes=10000,epochs=256,use_phase_shift=True,learning_
     if(verbose > 0):
         print('Audio signal sampled successfully.')
 
-    # analyze the audio signal
+    # building model
     model = keras.Sequential([
         keras.layers.Dense(max_modes, activation=math.sin, input_shape=(1,),use_bias=use_phase_shift),
         keras.layers.Dense(1,use_bias=False)
     ])
-    opt = keras.optimizers.Adam(learning_rate=learning_rate)
+
+    # compiling model
+    opt = None
+    optimizer = optimizer.strip().lower()
+    if(optimizer == supported_opt[0]):
+        opt = keras.optimizers.SGD(learning_rate=learning_rate)
+    elif(optimizer == supported_opt[1]):
+        opt = keras.optimizers.RMSprop(learning_rate=learning_rate)
+    elif(optimizer == supported_opt[2]):
+        opt = keras.optimizers.Adam(learning_rate=learning_rate)
+    elif(optimizer == supported_opt[3]):
+        try:
+            opt = keras.optimizers.AdamW(learning_rate=learning_rate)
+        except Exception as exc:
+            raise ValueError(f'{exc}')
+    elif(optimizer == supported_opt[4]):
+        opt = keras.optimizers.Adagrad(learning_rate=learning_rate)
+    elif(optimizer == supported_opt[5]):
+        opt = keras.optimizers.Adadelta(learning_rate=learning_rate)
+    elif(optimizer == supported_opt[6]):
+        opt = keras.optimizers.Adamax(learning_rate=learning_rate)
+    elif(optimizer == supported_opt[7]):
+        opt = keras.optimizers.Nadam(learning_rate=learning_rate)
+    elif(optimizer == supported_opt[8]):
+        opt = keras.optimizers.Ftrl(learning_rate=learning_rate)
+    
     model.compile(optimizer=opt, loss='mse', metrics=['mae'])
     if(verbose == 1):
         print('Model summary: \n')
         model.summary()
+    
+    # analyze audio signal
     if(verbose > 0):
         print('Analyzing the audio signal...')
 

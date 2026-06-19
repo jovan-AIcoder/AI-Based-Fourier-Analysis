@@ -75,18 +75,19 @@ These parameters are learned by a neural network instead of computed analyticall
 ## ⚙️ Parameters
 
 ```python
-aif.analyze(audio_path, max_modes=10000, epochs=256,use_phase_shift=True,learning_rate=0.00001,save_model=None,verbose=2,positive_freqs_only=True,abs_amplitudes=True)
+aif.analyze(audio_path, max_modes=10000, epochs=256,use_phase_shift=True,learning_rate=0.00001,save_model=None,verbose=2,positive_freqs_only=True,abs_amplitudes=True,optimizer='adam')
 ```
 
-* `audio_path` : Path to audio file
-* `max_modes`  : Number of sinusoidal components
-* `epochs`     : Training iterations (higher = better approximation)
+* `audio_path` : Path to audio file.
+* `max_modes`  : Number of sinusoidal components.
+* `epochs`     : Training iterations (higher = better approximation).
 * `use_phase_shift` : If this set to `False`, all phase shifts are set to zero.
-* `learning_rate` : Learning rate of NN
-* `save_model` : Path to save learned model
+* `learning_rate` : Learning rate of NN.
+* `save_model` : Path to save learned model.
 * `verbose` : Modes to show training behavior, which can be set to 0,1,2.
 * `positive_freqs_only` : If this set to `True`, this will keep the positive frequencies and delete the negative ones.
 * `abs_amplitudes` : If this set to `True`, all negative amplitudes will be positive-valued.
+* `optimizer` : The optimizer for training.
 
 ---
 
